@@ -23,7 +23,8 @@ def getLoginSessionJCI():
 def getFishmealPrice(date, cookies):
     # Date Format = 2023-8-15
     # China Domestic Super Prime Fishmeal Prices Daily Report (in RMB/MT)
-    report_url = f"https://www.jcichina.com/pro/news_jgrb.aspx?re_date={date}&info_no=893562A&pro_name=%E8%B6%85%E7%BA%A7%E8%92%B8%E6%B0%94%E9%B1%BC%E7%B2%89&zw=JCI"
+    mainurl = getCredentials("credentials.json", 1, "JCI")["mainurl"]
+    report_url = f"{mainurl}?re_date={date}&info_no=893562A&pro_name=%E8%B6%85%E7%BA%A7%E8%92%B8%E6%B0%94%E9%B1%BC%E7%B2%89&zw=JCI"
     response = requests.get( report_url, cookies = cookies)
     return response.text
 
@@ -34,7 +35,7 @@ def getTablePrices(html, date):
     df_prices["date"] = date
     return df_prices
 
-dates = list( pd.date_range(start="2023-01-01", end=datetime.date.today()).astype(str) )
+dates = list( pd.date_range(start="2023-09-18", end=datetime.date.today()).astype(str) )
 cookies = getLoginSessionJCI()
 
 dfs = ( getTablePrices(getFishmealPrice(date, cookies), date) for date in dates)
